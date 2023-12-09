@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "192/w8UjrrNKhB+eQWs3D5xNAghInesj92FNdqr97HIJwxHNbNp8wTOVOZi/AELyMTsQVvJAwslxynaStYaeJA==",
+  "success": true,
+  "projectFilePath": "/Users/d.hall/Documents/personal/advent_2023/day-1/day-1.fsproj",
+  "expectedPackageFiles": [
+    "/Users/d.hall/.nuget/packages/fsharp.core/7.0.300/fsharp.core.7.0.300.nupkg.sha512"
+  ],
+  "logs": []
+}
