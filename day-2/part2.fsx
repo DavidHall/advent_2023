@@ -43,14 +43,14 @@ let parseGame gameText =
 
 
 
-let isGameValid (game: Game, red: int, blue: int, green: int ) = 
-    let listOfDraws = game.draws |> Array.toList
+// let isGameValid (game: Game, red: int, blue: int, green: int ) = 
+//     let listOfDraws = game.draws |> Array.toList
     
-    let filtered = listOfDraws |> List.collect(fun (x) -> x |> Array.toList |> List.filter(
-        fun (a) -> a.color = CubeColor.Red && a.count > red || a.color = CubeColor.Blue && a.count > blue || a.color = CubeColor.Green && a.count > green
-        ))
+//     let filtered = listOfDraws |> List.collect(fun (x) -> x |> Array.toList |> List.filter(
+//         fun (a) -> a.color = CubeColor.Red && a.count > red || a.color = CubeColor.Blue && a.count > blue || a.color = CubeColor.Green && a.count > green
+//         ))
 
-    filtered.IsEmpty
+//     filtered.IsEmpty
 
 let path = "./input.txt"
 // For more information see https://aka.ms/fsharp-console-apps
@@ -58,14 +58,19 @@ let lines = File.ReadAllLines(path)
 
 let games = lines |> Seq.map(fun (x) -> parseGame x)
 
-//let games = parseGame sample
+let findMinCubes (game: Game) = 
+    let red = game.draws |> Array.collect (fun (a) -> a |> Array.filter (fun (x) -> x.color = CubeColor.Red))
+    let blue = game.draws |> Array.collect (fun (a) -> a |> Array.filter (fun (x) -> x.color = CubeColor.Blue))
+    let green = game.draws |> Array.collect (fun (a) -> a |> Array.filter (fun (x) -> x.color = CubeColor.Green))
+    
+    let result = [ ( CubeColor.Red, red |> Array.maxBy(fun (x) -> x.count) ); (CubeColor.Blue, blue |> Array.maxBy(fun (x) -> x.count) ); ( CubeColor.Green, green |> Array.maxBy(fun (x) -> x.count) )]
+    (result)
 
-let igv (red: int, blue: int, green: int) = fun (g: Game) -> isGameValid(g, red, blue, green)
+let countFromT (t: CubeColor* GameDraw) = 
+    match t with 
+    | (_, b) -> b.count
 
-let validator = igv(12, 14, 13)
-
-let result = games |> Seq.filter validator |> Seq.map (fun (x) -> x.id) |> Seq.sum
-//let parsedText = parseGame sample
+let result = games |> Seq.map findMinCubes |> Seq.map (fun (x) -> countFromT(x.[0]) * countFromT(x.[1]) * countFromT(x.[2])) |> Seq.sum
 
 printfn "%A" result
 
